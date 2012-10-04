@@ -75,5 +75,10 @@ if [ ! -x "$JSTACK" ]; then
 fi
 
 JAVA_UID=$(cat /proc/$PID/status  | grep Uid | awk '{print $2}')
+CURRENT_UID=$(cat /proc/$$/status  | grep Uid | awk '{print $2}')
 
-sudo -u#$JAVA_UID $JSTACK $PID  
+if [ ${JAVA_UID} != ${CURRENT_UID} ] ; then
+    sudo -u#$JAVA_UID $JSTACK $PID
+else
+    $JSTACK $PID
+fi
